@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="./jquery-3.7.1.min.js"></script>
+    <title>Document</title>
+    <style>
+        body {
+            background: rgb(239, 237, 223);
+            font-size: 16px;
+            text-transform: uppercase;
+        }
+
+        main {
+            width: 100%;
+            max-width: 940px;
+            margin: 0px auto;
+            padding: 60px 20px;
+            text-align: center;
+        }
+        #task-form input {
+            border: 1px solid rgb(204, 204, 204);
+            height: 80px;
+            width: 70%;
+            padding-left: 20px;
+            font-size: 20px;
+            text-transform: uppercase;
+            color: rgb(102, 102, 102);
+            float: left;
+            transition: all 0.3s ease 0s;
+        }
+
+        #task-form button {
+            height: 80px;
+            width: 19%;
+            border: 1px solid rgb(204, 204, 204);
+            background: rgb(240, 85, 59);
+            font-size: 20px;
+            color: rgb(255, 255, 255);
+            text-transform: uppercase;
+            cursor: pointer;
+            font-family: Quicksand, sans-serif;
+            transition: all 0.3s ease 0s;
+            position: relative;
+            border-radius: 6px;
+        }
+        #task-container ul {
+            overflow: hidden;
+        }
+
+        #task-container .task-headline {
+            display: none;
+            color: rgb(102, 102, 102);
+            border-bottom: 1px solid rgb(200, 199, 187);
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            position: relative;
+        }
+
+        #task-container .task-headline::before {
+            height: 1px;
+            width: 100%;
+            background: rgb(255, 255, 255);
+            position: absolute;
+            content: " ";
+            bottom: 0px;
+            left: 0px;
+        }
+        #task-list li {
+            float: left;
+            width: 40%;
+            overflow: auto;
+            height: auto;
+            min-height: 10px;
+            background: rgb(255, 255, 255);
+            display: inline-block;
+            padding: 20px;
+            border-width: 9px 1px 1px;
+            border-style: solid;
+            border-color: rgb(57, 209, 180) rgb(204, 204, 204) rgb(204, 204, 204);
+            border-image: initial;
+            color: rgb(102, 102, 102);
+            cursor: pointer;
+            margin-bottom: 10px;
+            margin-right: 2%;
+            transition: all 0.3s ease 0s;
+            position: relative;
+        }
+
+        #task-list li:nth-child(2n) {
+            margin-right: 0px;
+        }
+
+        #task-list li:hover {
+            opacity: 0.8;
+            border-top: 9px solid rgb(240, 85, 59);
+        }
+
+        #task-list p {
+            line-height: 1.6em;
+            text-align: left;
+        }
+
+        #task-list li.complete {
+            opacity: 0.3;
+            border-top: 9px solid rgb(102, 102, 102);
+            transition: all 0.3s ease 0s;
+        }
+
+       
+        #task-list li.complete:hover {
+            border-top: 9px solid rgb(240, 85, 59);
+            opacity: 0.6;
+        }
+
+        #task-list li.complete p {
+            text-decoration: line-through;
+        }
+
+        #controls {
+            display: none;
+            text-align: center;
+            clear: both;
+            margin-top: 60px;
+            background: rgb(228, 227, 213);
+            padding: 20px;
+            border: 1px solid rgb(200, 199, 187);
+        }
+
+        #controls p {
+            display: inline-block;
+            color: rgb(102, 102, 102);
+            font-style: italic;
+        }
+
+        #controls p:first-child {
+            margin-right: 20px;
+        }
+
+        #clear-all-tasks {
+            clear: both;
+            margin-top: 20px;
+            background: rgb(153, 153, 153);
+            border: none;
+            color: rgb(255, 255, 255);
+            padding: 10px 20px;
+            text-transform: uppercase;
+            cursor: pointer;
+            font-family: Quicksand, sans-serif;
+            transition: all 0.3s ease 0s;
+        }
+
+        #clear-all-tasks:hover {
+            background: rgb(102, 102, 102);
+            transition: all 0.3s ease 0s;
+        }
+        #clearTasks{
+            background-color:rgb(240, 85, 59);
+            color: aliceblue;
+            width: 200px;
+            padding: 30px;
+            border: none;
+        }
+        a{
+            text-decoration: none;
+        }
+    </style>
+   
+</head>
+
+<body> 
+    <header>
+        <h2>salem task </h2>
+        <a href="https://github.com/salembht">My github</a>
+    </header>
+    <main>
+        <section id="task-form">
+            <input  type="text" name="task-maker" placeholder="Insert your list items here">
+            <button id="create-task">Create List</button>
+        </section>
+        <section id="task-container">
+            <ul id="task-list">
+                <h3 class="nothing-message" style="display: block;">No list yet</h3>
+                <h3 class="task-headline" style="display: none;">Today's Tasks</h3>
+            </ul>
+            <div id="controls" style="display: none;">
+                <p>**Single Click to mark complete</p>
+                <p>**Double Click to remove from list</p><br>
+                <button id="clearTasks">Clear All Tasks</button>
+            </div>
+        </section>
+    </main>
+    <script>
+        $(document).ready( function(){ 
+            let numberOfTaskes;
+            $("#create-task").click( function(){
+                let inputvalue=$("#task-form input").val();
+                if(inputvalue.length <=0){
+                    alert("please dont make the input empty")
+                }
+                else{
+                    $('#task-list').append(`<li><p>${inputvalue}</p></li>`)
+                    $("#task-form input").val("") 
+                    $(".nothing-message").css({"display":" none"})
+                    $(".task-headline").css({"display":" block"})
+                    $("#controls").css({"display":" block"}) 
+                }
+            })
+            $("#task-list").on( "click","li" ,function(){
+            $(this).addClass("complete")
+            }) 
+            $("#task-list").on( "dblclick","li" ,function(){
+            $(this).remove(); 
+             numberOfTaskes =$("#task-list li").length
+            if(numberOfTaskes ==0){
+                $(".nothing-message").css({"display":" block"})
+                    $(".task-headline").css({"display":" none"})
+                    $("#controls").css({"display":" none"}) 
+            }
+            }) 
+            $("#clearTasks").click(function(){
+                $("#task-list li").remove();
+                $(".nothing-message").css({"display":" block"})
+                    $(".task-headline").css({"display":" none"})
+                    $("#controls").css({"display":" none"}) 
+            })
+        } )
+    </script>
+</body>
+
+</html>
