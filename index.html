@@ -119,7 +119,16 @@
         #task-list li.complete p {
             text-decoration: line-through;
         }
-
+        #task-list li.complete:before{
+	background:url("./complete.png") no-repeat;
+	position: absolute;
+	top:5px;
+	right:5px;
+	content: "";
+	width: 55px;
+	height: 55px;
+	background-size: 100%;
+}
         #controls {
             display: none;
             text-align: center;
